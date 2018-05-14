@@ -1,0 +1,71 @@
+/*
+Constants
+*/
+/*
+Hides text in the margin
+*/
+/*
+Turns a button into an icon
+*/
+/*
+Centres a graphic or glyph inside an icon
+*/
+/*
+Offers both the pixel and rem value of a single property
+*/
+/*
+Offers both the pixel and rem values of a shorthand property
+*/
+/*
+Offers the text size as both the pixel and rem value
+*/
+/*
+Adds vendor prefixed to a property
+*/
+/*
+Applies the "clearfix" hack to a container with floating content
+*/
+/*
+	In View
+*/
+.inview-lead {
+  padding: 2rem;
+  background-color: #ffcc00;
+  border: solid 2px #cc9900; }
+
+.inview-message {
+  padding: 2rem;
+  background-color: #ffcc00;
+  border: solid 2px #cc9900;
+  -webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 20;
+  -webkit-transform: translateY(-200%);
+  transform: translateY(-200%);
+  -webkit-transition: -webkit-transform ease 500ms;
+  transition: -webkit-transform ease 500ms;
+  transition: transform ease 500ms;
+  transition: transform ease 500ms, -webkit-transform ease 500ms; }
+  .inview-message.scrolled-above {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
+
+.inview-aside {
+  float: right;
+  margin: 0 0 2rem 2rem;
+  padding: 2rem;
+  background-color: #ffcc00;
+  border: solid 2px #cc9900;
+  -webkit-transition: -webkit-transform ease 500ms;
+  transition: -webkit-transform ease 500ms;
+  transition: transform ease 500ms;
+  transition: transform ease 500ms, -webkit-transform ease 500ms;
+  -webkit-transform: translate(200%, 0);
+  transform: translate(200%, 0); }
+  .inview-aside.scrolled-visible {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0); }

@@ -1,0 +1,40 @@
+/*
+	In View
+*/
+
+.inview-lead {
+	padding: 2rem;
+	background-color: #ffcc00;
+	border: solid 2px #cc9900;
+}
+
+.inview-message {
+	padding: 2rem;
+	background-color: #ffcc00;
+	border: solid 2px #cc9900;
+	box-shadow: 0 0 16px rgba(0,0,0,0.2);
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 20;
+	transform: translateY(-200%);
+	transition: transform ease 500ms;
+
+	&.scrolled-above {
+		transform: translateY(0);
+	}
+}
+
+.inview-aside {
+	float: right;
+	margin: 0 0 2rem 2rem;
+	padding: 2rem;
+	background-color: #ffcc00;
+	border: solid 2px #cc9900;
+	transition: transform ease 500ms;
+	transform: translate(200%, 0);
+	&.scrolled-visible {
+		transform: translate(0, 0);
+	}
+}
