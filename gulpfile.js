@@ -1,6 +1,6 @@
-// project
+// project name
 
-var project = __dirname.split('/').pop();
+var project = __dirname.split(/\/|-/).pop();
 
 // dependencies
 
@@ -16,7 +16,8 @@ var gulp = require('gulp'),
 	special = require('gulp-special-html'),
 	clean = require('gulp-clean'),
 	prerequisites = [
-		'polyfills'
+		//'polyfills',
+		//'requests'
 	];
 
 // prerequisites
@@ -28,7 +29,7 @@ gulp.task('unimport', function() {
 
 gulp.task('import', function() {
 	prerequisites.forEach(function(a) {
-		gulp.src('../useful-' + a + '/src/js/*.js', {base: '../useful-' + a + '/src/js/'})
+		gulp.src('../useful-' + a + '/dist/js/*.js', {base: '../useful-' + a + '/dist/js/'})
 			.pipe(gulp.dest('src/lib/'));
 	});
 });
@@ -55,7 +56,7 @@ gulp.task('connectphp', function() {
 // dynamic reload
 
 gulp.task('html', function() {
-	gulp.src('dist/*.html')
+	gulp.src('dist/**/*.html')
 		.pipe(connect.reload());
 });
 
@@ -140,13 +141,13 @@ gulp.task('styles:dist', function() {
 });
 
 gulp.task('scripts:dev', function() {
-	gulp.src(['src/lib/*.js', 'src/js/*.js'])
+	gulp.src(['src/lib/*.js', 'src/js/' + project + '.js', 'src/js/*.js'])
 		.pipe(concat(project + '.js'))
 		.pipe(gulp.dest('dist/js/'));
 });
 
 gulp.task('scripts:dist', function() {
-	gulp.src(['src/lib/*.js', 'src/js/*.js'])
+	gulp.src(['src/lib/*.js', 'src/js/' + project + '.js', 'src/js/*.js'])
 		.pipe(concat(project + '.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('dist/js/'));
@@ -155,10 +156,10 @@ gulp.task('scripts:dist', function() {
 // watch changes
 
 gulp.task('watch', function() {
-	gulp.watch(['./src/*.html'], ['markup']);
+	gulp.watch(['./src/**/*.html', './src/**/*.php'], ['markup']);
 	gulp.watch(['./src/scss/*.scss'], ['styles:dev']);
 	gulp.watch(['./src/js/*.js'], ['scripts:dev']);
-	gulp.watch(['./dist/*.html'], ['html']);
+	gulp.watch(['./dist/**/*.html'], ['html']);
 	gulp.watch(['./dist/css/*.css'], ['css']);
 	gulp.watch(['./dist/js/*.js'], ['js']);
 });
@@ -176,13 +177,3 @@ function errorHandler(error) {
 	console.log(error.toString());
 	this.emit('end');
 }
-
-
-
-
-
-
-
-
-
-// EOF

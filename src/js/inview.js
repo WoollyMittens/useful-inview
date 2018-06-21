@@ -1,23 +1,13 @@
 /*
 	Source:
-	van Creij, Maurice (2014). "useful.inview.js: Makes a page element react to being in view.", version 20141127, http://www.woollymittens.nl/.
+	van Creij, Maurice (2018). "inview.js: Makes a page element react to being in view.", http://www.woollymittens.nl/.
 
 	License:
 	This work is licensed under a Creative Commons Attribution 3.0 Unported License.
 */
 
-// create the constructor if needed
-var useful = useful || {};
-useful.InView = useful.InView || function () {};
-
-// extend the constructor
-useful.InView.prototype.init = function (config) {
-
-	// PROPERTIES
-
-	"use strict";
-
-	// METHODS
+// establish the class
+var InView = function (config) {
 
 	this.only = function (config) {
 		// start an instance of the script
@@ -33,13 +23,11 @@ useful.InView.prototype.init = function (config) {
 			// insert the current element
 			_config.element = config.elements[a];
 			// start a new instance of the object
-			instances[a] = new this.Main(_config, _context).init();
+			instances[a] = new this.Main(_config, _context);
 		}
 		// return the instances
 		return instances;
 	};
-
-	// START
 
 	return (config.elements) ? this.each(config) : this.only(config);
 
@@ -47,5 +35,5 @@ useful.InView.prototype.init = function (config) {
 
 // return as a require.js module
 if (typeof module !== 'undefined') {
-	exports = module.exports = useful.InView;
+	exports = module.exports = InView;
 }

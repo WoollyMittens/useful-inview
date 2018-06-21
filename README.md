@@ -1,4 +1,4 @@
-# useful.inview.js: React to Being in View
+# inview.js: React to Being in View
 
 Makes a page element react to being in view.
 
@@ -9,34 +9,32 @@ Try the <a href="http://www.woollymittens.nl/default.php?url=useful-inview">demo
 The stylesheet is best included in the header of the document.
 
 ```html
-<link rel="stylesheet" href="./css/useful-inview.css"/>
+<link rel="stylesheet" href="./css/inview.css"/>
 ```
 
 This include can be added to the header or placed inline before the script is invoked.
 
 ```html
-<script src="./js/useful-inview.js"></script>
-```
-
-To enable the use of HTML5 tags in Internet Explorer 8 and lower, include *html5.js*.
-
-```html
-<!--[if lte IE 9]>
-	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
+<script src="./js/inview.js"></script>
 ```
 
 ## How to start the script
 
 ```javascript
-var inView = new useful.InView().init({
+var inView = new InView({
 	'element': document.querySelector('.inview-lead'),
 	'target': document.querySelector('.inview-message'),
 	'ifAbove': ' scrolled-above',
 	'ifBelow': ' scrolled-below',
 	'ifVisible': ' scrolled-visible',
+	'ifRevealed': ' scrolled-revealed',
+	'ifUpwards': ' scrolled-up',
+	'ifDownwards': ' scrolled-down',
+	'offset': -50,
+	'tolerance': 10,
 	'toggle': true,
-	'offset': -50
+	'navigate': false,
+	'step': 0.1
 });
 ```
 
@@ -50,9 +48,21 @@ var inView = new useful.InView().init({
 
 **'ifVisible' : {className}** - The class name to assign to the target when the element is in view.
 
+**'ifRevealed' : {className}** - The class name to assign to the target when the element has filled the view.
+
+**'ifUpwards': {className}** - The class name to assign to the target when the page is scrolled up.
+
+**'ifDownwards': {className}** - The class name to assign to the target when the page is scrolled down.
+
+**'offset' : {integer | DOM node}** - Extra distance to scroll before the element reacts.
+
+**'tolerance' : {integer}** - Allow rounding errors of this size.
+
 **'toggle' : {boolean}** - Allow the affected element to change more than once.
 
-**'offset' : {class name}** - Extra distance to scroll before the element reacts.
+**'navigate' : {boolean}** - Allow a click on the target to scroll to the element.
+
+**'step' : {float}** - Fraction of total distance to scroll each animation step.
 
 ## How to build the script
 

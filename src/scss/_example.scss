@@ -1,0 +1,89 @@
+.inview-lead {
+	padding: 2rem;
+	margin: 0;
+	background-color: #fc0;
+	border: solid 2px #c90;
+}
+
+.inview-message {
+	padding: 2rem;
+	margin: 2rem 4rem;
+	background-color: #fc0;
+	border: solid 2px #c90;
+	box-shadow: 0 0 16px rgba(0,0,0,0.2);
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 20;
+	transform: translateY(-300%);
+	transition-property: transform, top;
+	transition-duration: 500ms;
+
+	&.scrolled-above {
+		transform: translateY(0);
+	}
+}
+
+.scrolled-up .inview-message {
+	top: 7rem;
+}
+
+.scrolled-down .inview-message {
+	top: 0;
+}
+
+.inview-pitstop {
+	height: 7rem;
+	margin: -4rem -4rem 2rem;
+	position: relative;
+
+	nav {
+		position: absolute;
+		background-color: #ccc;
+		border: solid 2px #999;
+		display: flex;
+		align-items: center;
+		margin: 0 0 2rem;
+		left: 0;
+		top: 0;
+		width: 100%;
+		transition-property: transform;
+		transition-duration: 500ms;
+
+		a {
+			color: #333;
+			display: inline-block;
+			padding: 2rem;
+			text-decoration: none;
+
+			&.scrolled-revealed {
+				color: #666;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+.inview-pitstop.scrolled-above nav {
+	transform: translateY(-300%);
+}
+
+.scrolled-up .inview-pitstop.scrolled-above nav {
+	position: fixed;
+	transform: translateY(0);
+}
+
+.inview-aside {
+	float: right;
+	margin: 0 0 2rem 2rem;
+	padding: 2rem;
+	background-color: #fc0;
+	border: solid 2px #c90;
+	transition: transform ease 500ms;
+	transform: translate(200%, 0);
+
+	&.scrolled-visible {
+		transform: translate(0, 0);
+	}
+}
