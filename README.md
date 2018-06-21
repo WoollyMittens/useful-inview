@@ -50,13 +50,13 @@ var inView = new InView({
 
 **'ifRevealed' : {className}** - The class name to assign to the target when the element has filled the view.
 
-**'ifUpwards': {className}** - The class name to assign to the target when the page is scrolled up.
+**'ifUpwards': {className}** - The class name to assign to the body when the page is scrolled up.
 
-**'ifDownwards': {className}** - The class name to assign to the target when the page is scrolled down.
+**'ifDownwards': {className}** - The class name to assign to the body when the page is scrolled down.
 
 **'offset' : {integer | DOM node}** - Extra distance to scroll before the element reacts.
 
-**'tolerance' : {integer}** - Allow rounding errors of this size.
+**'tolerance' : {integer}** - Allow rounding errors up to this size.
 
 **'toggle' : {boolean}** - Allow the affected element to change more than once.
 
