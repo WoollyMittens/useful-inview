@@ -76,12 +76,15 @@
   -webkit-transform: translateY(0);
   transform: translateY(0); }
 
+.inview-transform,
 .inview-aside {
   float: right;
   margin: 0 0 2rem 2rem;
   padding: 2rem;
   background-color: #fc0;
-  border: solid 2px #c90;
+  border: solid 2px #c90; }
+
+.inview-aside {
   -webkit-transition: -webkit-transform ease 500ms;
   transition: -webkit-transform ease 500ms;
   transition: transform ease 500ms;

@@ -34,7 +34,9 @@ var inView = new InView({
 	'tolerance': 10,
 	'toggle': true,
 	'navigate': false,
-	'step': 0.1
+	'step': 0.1,
+	'transform': function(transit){ return 'translateX(' + Math.max((0.5 - transit) * 100, 0) + '%)' },
+	'opacity': function(transit){ return Math.min(2 * transit, 1) }
 });
 ```
 
@@ -63,6 +65,13 @@ var inView = new InView({
 **'navigate' : {boolean}** - Allow a click on the target to scroll to the element.
 
 **'step' : {float}** - Fraction of total distance to scroll each animation step.
+
+**'transform' : {function(transit)}** - Optional function that returns a CSS transformation based on the transit of the element.
+- **'transit' : {float}** - Number that increases between 0 and 1 as the objects scrolls from bottom to top.
+
+**'opacity' : {function(transit)}** - Optional function that returns a CSS opacity based on the transit.
+- **'transit' : {float}** - Number that increases between 0 and 1 as the objects scrolls from bottom to top.
+
 
 ## How to build the script
 

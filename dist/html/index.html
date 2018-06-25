@@ -81,6 +81,9 @@
 	</article>
 	<article id="inview-dolor">
 		<h2>Dolor</h2>
+		<aside class="inview-transform">
+			Lorem ipsum dolor sit amet.
+		</aside>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
 			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -135,6 +138,12 @@
 			'target': document.querySelector('[href="#inview-dolor"]'),
 			'offset': document.querySelector('.inview-pitstop nav'),
 			'navigate': true
+		});
+		// Transformed items
+		var inView_transform = new InView({
+			'element': document.querySelector('.inview-transform'),
+			'transform': function(transit){ return 'translateX(' + Math.max((0.5 - transit) * 100, 0) + '%)' },
+			'opacity': function(transit){ return Math.min(2 * transit, 1) }
 		});
 		//-->
 	</script>

@@ -19,7 +19,9 @@ InView.prototype.Main = function(config, context) {
 		'tolerance': 10,
 		'toggle': true,
 		'navigate': false,
-		'step': 0.1
+		'step': 0.1,
+		'transform': null,
+		'opacity': null
 	};
 
 	for (var key in config) {
@@ -60,13 +62,17 @@ InView.prototype.Main = function(config, context) {
 		var height = (window.innerHeight || document.documentElement.clientHeight);
 		var width = (window.innerWidth || document.documentElement.clientWidth);
 		var offset = this.offset();
+		var scrolled = window.pageYOffset;
+		var minY = -el.offsetHeight;
+		var maxY = height;
 		return ({
-			'scrolled': window.pageYOffset,
+			'scrolled': scrolled,
 			'distance': rect.top - offset,
 			'above': rect.bottom < offset,
 			'below': rect.top > (height + offset),
 			'visible': rect.top <= (height + offset) && rect.bottom >= offset,
-			'revealed': rect.top <= offset && rect.bottom >= offset
+			'revealed': rect.top <= offset && rect.bottom >= offset,
+			'transit': Math.min(Math.max(1 - (rect.top - minY) / (maxY - minY), 0), 1)
 		});
 	};
 
@@ -74,7 +80,9 @@ InView.prototype.Main = function(config, context) {
 
 	this.onNavigate = function(destination, evt) {
 		// cancel the click
-		if (evt && evt.preventDefault) evt.preventDefault();
+		if (evt && evt.preventDefault)
+			evt.preventDefault();
+
 		// if not near the destination
 		var position = this.isElementInViewport(destination);
 		if (Math.abs(position.distance) > this.config.tolerance) {
@@ -152,6 +160,14 @@ InView.prototype.Main = function(config, context) {
 				// remove the class name
 				changed.className = changed.className.replace(new RegExp(this.config.ifRevealed, 'g'), '');
 			}
+		}
+		// apply the transformations
+		if (this.config.transform) {
+			changed.style.transform = this.config.transform(position.transit);
+		}
+		// apply the opacity
+		if (this.config.opacity) {
+			changed.style.opacity = this.config.opacity(position.transit);
 		}
 		// store the position
 		this.previous = position;

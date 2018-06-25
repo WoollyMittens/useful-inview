@@ -74,15 +74,18 @@
 	transform: translateY(0);
 }
 
+.inview-transform,
 .inview-aside {
 	float: right;
 	margin: 0 0 2rem 2rem;
 	padding: 2rem;
 	background-color: #fc0;
 	border: solid 2px #c90;
+}
+
+.inview-aside {
 	transition: transform ease 500ms;
 	transform: translate(200%, 0);
-
 	&.scrolled-visible {
 		transform: translate(0, 0);
 	}
