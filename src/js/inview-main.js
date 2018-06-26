@@ -35,6 +35,8 @@ InView.prototype.Main = function(config, context) {
 		if (this.config.element) {
 			// generate regexp
 			this.regexps.direction = new RegExp(this.config.ifDownwards + '|' + this.config.ifUpwards);
+			// interpret the tag attributes
+			this.attribs(this.config.element);
 			// initial scroll position
 			this.previous.scrolled = window.pageYOffset;
 			// add the event handler
@@ -48,6 +50,42 @@ InView.prototype.Main = function(config, context) {
 		}
 		// return the object
 		return this;
+	};
+
+	this.parse = function(attr) {
+		if(!attr) return null;
+		var values = attr.split(',');
+		var unit = values[0].match(/\%|deg|rem|em|pt|px/);
+		values[0] = parseFloat(values[0]);
+		values[1] = parseFloat(values[1]);
+		return {'from': values[0], 'to': values[1], 'unit': unit};
+	};
+
+	this.attribs = function(element) {
+		var dataTranslateX = element.getAttribute('data-translate-x');
+		var dataTranslateY = element.getAttribute('data-translate-y');
+		var dataRotate = element.getAttribute('data-rotate');
+		var dataScale = element.getAttribute('data-scale');
+		var dataOpacity = element.getAttribute('data-opacity');
+		if (dataTranslateX || dataTranslateY || dataRotate || dataScale) {
+			var hor = this.parse(dataTranslateX);
+			var ver = this.parse(dataTranslateY);
+			var rot = this.parse(dataRotate);
+			var scale = this.parse(dataScale);
+			this.config.transform = function(transit) {
+				var translation = (hor) ? 'translateX(' + ((hor.to - hor.from) * (1 - transit) + hor.from) + hor.unit + ')' : '';
+				translation += (ver) ? ' translateY(' + ((ver.to - ver.from) * (1 - transit) + ver.from) + ver.unit + ')' : '';
+				translation += (rot) ? ' rotate(' + ((rot.to - rot.from) * (1 - transit) + rot.from) + rot.unit + ')' : '';
+				translation += (scale) ? ' scale(' + ((scale.to - scale.from) * (1 - transit) + scale.from) + ')' : '';
+				return translation;
+			};
+		}
+		if (dataOpacity) {
+			var opacity = this.parse(dataOpacity);
+			this.config.opacity = function(transit) {
+				return ((opacity.to - opacity.from) * transit + opacity.from);
+			}
+		}
 	};
 
 	this.offset = function() {
@@ -72,8 +110,90 @@ InView.prototype.Main = function(config, context) {
 			'below': rect.top > (height + offset),
 			'visible': rect.top <= (height + offset) && rect.bottom >= offset,
 			'revealed': rect.top <= offset && rect.bottom >= offset,
-			'transit': Math.min(Math.max(1 - (rect.top - minY) / (maxY - minY), 0), 1)
+			'transit': Math.min(Math.max((rect.top - minY - offset) / (maxY - minY - offset), 0), 1)
 		});
+	};
+
+	this.ifDirection = function(position, previous) {
+		if (position.scrolled > previous.scrolled && document.body.className.indexOf(this.config.ifDownwards) < 0) {
+			document.body.className = document.body.className.replace(this.regexps.direction, '') + this.config.ifDownwards;
+		} else if (position.scrolled < previous.scrolled && document.body.className.indexOf(this.config.ifUpwards) < 0) {
+			document.body.className = document.body.className.replace(this.regexps.direction, '') + this.config.ifUpwards;
+		}
+	};
+
+	this.ifAbove = function(position, changed) {
+		if (position.above) {
+			// and the element doesn't have the class name yet
+			if (changed.className.indexOf(this.config.ifAbove) < 0) {
+				// give it the class name
+				changed.className += this.config.ifAbove;
+			}
+			// or if the element has the class name
+		} else if (changed.className.indexOf(this.config.ifAbove) >= 0) {
+			// remove the class name
+			changed.className = changed.className.replace(new RegExp(this.config.ifAbove, 'g'), '');
+		}
+	};
+
+	this.ifBelow = function(position, changed) {
+		if (position.below) {
+			// and the element doesn't have the class name yet
+			if (changed.className.indexOf(this.config.ifBelow) < 0) {
+				// give it the class name
+				changed.className += this.config.ifBelow;
+			}
+			// or
+		} else if (changed.className.indexOf(this.config.ifBelow) >= 0) {
+			// remove the class name
+			changed.className = changed.className.replace(new RegExp(this.config.ifBelow, 'g'), '');
+		}
+	};
+
+	this.ifVisible = function(position, changed) {
+		if (position.visible) {
+			// and the element doesn't have the class name yet
+			if (changed.className.indexOf(this.config.ifVisible) < 0) {
+				// give it the class name
+				changed.className += this.config.ifVisible;
+			}
+			// or if its supposed to toggle
+		} else if (this.config.toggle) {
+			// if the element has the class name
+			if (changed.className.indexOf(this.config.ifVisible) >= 0) {
+				// remove the class name
+				changed.className = changed.className.replace(new RegExp(this.config.ifVisible, 'g'), '');
+			}
+		}
+	};
+
+	this.ifRevealed = function(position, changed) {
+		if (position.revealed) {
+			// and the element doesn't have the class name yet
+			if (changed.className.indexOf(this.config.ifRevealed) < 0) {
+				// give it the class name
+				changed.className += this.config.ifRevealed;
+			}
+			// or if its supposed to toggle
+		} else if (this.config.toggle) {
+			// if the element has the class name
+			if (changed.className.indexOf(this.config.ifRevealed) >= 0) {
+				// remove the class name
+				changed.className = changed.className.replace(new RegExp(this.config.ifRevealed, 'g'), '');
+			}
+		}
+	};
+
+	this.ifTransformed = function(position, changed) {
+		if (this.config.transform) {
+			changed.style.transform = this.config.transform(position.transit);
+		}
+	};
+
+	this.ifFaded = function(position, changed) {
+		if (this.config.opacity) {
+			changed.style.opacity = this.config.opacity(1 - position.transit);
+		}
 	};
 
 	// EVENTS
@@ -101,74 +221,19 @@ InView.prototype.Main = function(config, context) {
 		var position = this.isElementInViewport(watched);
 		var previous = this.previous;
 		// note the direction the page is being scrolled in
-		if (position.scrolled > previous.scrolled && document.body.className.indexOf(this.config.ifDownwards) < 0) {
-			document.body.className = document.body.className.replace(this.regexps.direction, '') + this.config.ifDownwards;
-		} else if (position.scrolled < previous.scrolled && document.body.className.indexOf(this.config.ifUpwards) < 0) {
-			document.body.className = document.body.className.replace(this.regexps.direction, '') + this.config.ifUpwards;
-		}
-		this.previous = position.scrolled;
+		this.ifDirection(position, previous);
 		// if the watched object is above the viewport
-		if (position.above) {
-			// and the element doesn't have the class name yet
-			if (changed.className.indexOf(this.config.ifAbove) < 0) {
-				// give it the class name
-				changed.className += this.config.ifAbove;
-			}
-			// or if the element has the class name
-		} else if (changed.className.indexOf(this.config.ifAbove) >= 0) {
-			// remove the class name
-			changed.className = changed.className.replace(new RegExp(this.config.ifAbove, 'g'), '');
-		}
+		this.ifAbove(position, changed);
 		// if the watched object is under the viewport
-		if (position.below) {
-			// and the element doesn't have the class name yet
-			if (changed.className.indexOf(this.config.ifBelow) < 0) {
-				// give it the class name
-				changed.className += this.config.ifBelow;
-			}
-			// or
-		} else if (changed.className.indexOf(this.config.ifBelow) >= 0) {
-			// remove the class name
-			changed.className = changed.className.replace(new RegExp(this.config.ifBelow, 'g'), '');
-		}
+		this.ifBelow(position, changed);
 		// if the watched object is visible in the viewport
-		if (position.visible) {
-			// and the element doesn't have the class name yet
-			if (changed.className.indexOf(this.config.ifVisible) < 0) {
-				// give it the class name
-				changed.className += this.config.ifVisible;
-			}
-			// or if its supposed to toggle
-		} else if (this.config.toggle) {
-			// if the element has the class name
-			if (changed.className.indexOf(this.config.ifVisible) >= 0) {
-				// remove the class name
-				changed.className = changed.className.replace(new RegExp(this.config.ifVisible, 'g'), '');
-			}
-		}
+		this.ifVisible(position, changed);
 		// if the watched object has filled the viewport
-		if (position.revealed) {
-			// and the element doesn't have the class name yet
-			if (changed.className.indexOf(this.config.ifRevealed) < 0) {
-				// give it the class name
-				changed.className += this.config.ifRevealed;
-			}
-			// or if its supposed to toggle
-		} else if (this.config.toggle) {
-			// if the element has the class name
-			if (changed.className.indexOf(this.config.ifRevealed) >= 0) {
-				// remove the class name
-				changed.className = changed.className.replace(new RegExp(this.config.ifRevealed, 'g'), '');
-			}
-		}
+		this.ifRevealed(position, changed);
 		// apply the transformations
-		if (this.config.transform) {
-			changed.style.transform = this.config.transform(position.transit);
-		}
+		this.ifTransformed(position, changed);
 		// apply the opacity
-		if (this.config.opacity) {
-			changed.style.opacity = this.config.opacity(position.transit);
-		}
+		this.ifFaded(position, changed);
 		// store the position
 		this.previous = position;
 	};

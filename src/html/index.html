@@ -32,6 +32,7 @@
 			<a href="#inview-lorem">Lorem</a>
 			<a href="#inview-ipsum">Ipsum</a>
 			<a href="#inview-dolor">Dolor</a>
+			<a href="#inview-sitamet">Sit Amet</a>
 		</nav>
 	</header>
 	<figure class="inview-lead">
@@ -99,13 +100,32 @@
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
 			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 	</article>
+	<article id="inview-sitamet">
+		<h2>Sit Amet</h2>
+		<aside class="inview-inline" data-translate-x="150%,0%" data-translate-y="150%,0%" data-rotate="180deg,0deg" data-scale="0.5,1" data-opacity="0,1">
+			Lorem ipsum dolor sit amet.
+		</aside>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+			dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	</article>
 	<!-- Cut below this -->
 	<style>
 		@import url("../css/inview.css");
 	</style>
 	<script src="../js/inview.js"></script>
 	<script>
-		//<!--
 		// Pitstop example
 		var inView_pitstop = new InView({
 			'element': document.querySelector('.inview-pitstop')
@@ -139,13 +159,24 @@
 			'offset': document.querySelector('.inview-pitstop nav'),
 			'navigate': true
 		});
+		var inView_sitamet = new InView({
+			'element': document.querySelector('#inview-sitamet'),
+			'target': document.querySelector('[href="#inview-sitamet"]'),
+			'offset': document.querySelector('.inview-pitstop nav'),
+			'navigate': true
+		});
 		// Transformed items
 		var inView_transform = new InView({
 			'element': document.querySelector('.inview-transform'),
-			'transform': function(transit){ return 'translateX(' + Math.max((0.5 - transit) * 100, 0) + '%)' },
-			'opacity': function(transit){ return Math.min(2 * transit, 1) }
+			'offset': 300,
+			'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
+			'opacity': function(transit){ return transit }
 		});
-		//-->
+		// Inline transformations
+		var inView_inline = new InView({
+			'element': document.querySelector('.inview-inline'),
+			'offset': 300
+		});
 	</script>
 	<!-- Cut above this -->
 </body>

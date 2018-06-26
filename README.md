@@ -35,8 +35,8 @@ var inView = new InView({
 	'toggle': true,
 	'navigate': false,
 	'step': 0.1,
-	'transform': function(transit){ return 'translateX(' + Math.max((0.5 - transit) * 100, 0) + '%)' },
-	'opacity': function(transit){ return Math.min(2 * transit, 1) }
+	'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
+	'opacity': function(transit){ return transit }
 });
 ```
 
@@ -67,10 +67,26 @@ var inView = new InView({
 **'step' : {float}** - Fraction of total distance to scroll each animation step.
 
 **'transform' : {function(transit)}** - Optional function that returns a CSS transformation based on the transit of the element.
-- **'transit' : {float}** - Number that increases between 0 and 1 as the objects scrolls from bottom to top.
+- **'transit' : {float}** - Number that decrease from 1 to 0 as the objects scrolls from bottom to top.
 
-**'opacity' : {function(transit)}** - Optional function that returns a CSS opacity based on the transit.
-- **'transit' : {float}** - Number that increases between 0 and 1 as the objects scrolls from bottom to top.
+**'opacity' : {function(exposure)}** - Optional function that returns a CSS opacity based on the transit.
+- **'exposure' : {float}** - Number that increase from 0 to 1 as the objects scrolls into view.
+
+```html
+<aside class="inview-inline" data-translate-x="150%,0%" data-translate-y="150%,0%" data-rotate="0deg,180deg" data-scale="0.5,1" data-opacity="0,1">
+	Lorem ipsum dolor sit amet.
+</aside>
+```
+
+**'data-translate-x' : {from,to}** - The element will translate horizontally from the first to the second value as it scrolls up the screen.
+
+**'data-translate-y' : {from,to}** - The element will translate horizontally from the first to the second value as it scrolls up the screen.
+
+**'data-rotate' : {from,to}** - The element will rotate from the first to the second value as it scrolls up the screen.
+
+**'data-scale' : {from,to}** - The element will scale from the first to the second value as it scrolls up the screen.
+
+**'data-opacity' : {from,to}** - The element will fade from the first to the second value as it scrolls up the screen.
 
 
 ## How to build the script

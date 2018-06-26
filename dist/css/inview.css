@@ -37,7 +37,8 @@
 .inview-pitstop {
   height: 7rem;
   margin: -4rem -4rem 2rem;
-  position: relative; }
+  position: relative;
+  z-index: 100; }
   .inview-pitstop nav {
     position: absolute;
     background-color: #ccc;
@@ -76,6 +77,7 @@
   -webkit-transform: translateY(0);
   transform: translateY(0); }
 
+.inview-inline,
 .inview-transform,
 .inview-aside {
   float: right;

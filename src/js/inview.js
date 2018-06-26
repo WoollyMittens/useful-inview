@@ -11,7 +11,7 @@ var InView = function (config) {
 
 	this.only = function (config) {
 		// start an instance of the script
-		return new this.Main(config, this).init();
+		return new this.Main(config, this);
 	};
 
 	this.each = function (config) {
