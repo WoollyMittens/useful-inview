@@ -22,8 +22,8 @@ This include can be added to the header or placed inline before the script is in
 
 ```javascript
 var inView = new InView({
-	'element': document.querySelector('.inview-lead'),
-	'target': document.querySelector('.inview-message'),
+	'element': document.querySelector('.inview-message'),
+	'source': document.querySelector('.inview-lead'),
 	'ifAbove': ' scrolled-above',
 	'ifBelow': ' scrolled-below',
 	'ifVisible': ' scrolled-visible',
@@ -42,7 +42,7 @@ var inView = new InView({
 
 **'element' : {DOM node}** - The element to watch and/or affect.
 
-**'target' : {DOM node}** - The optional target of the effect.
+**'source' : {DOM node}** - The position of this element will be used instead.
 
 **'ifAbove' : {className}** - The class name to assign to the target when the element is above the view.
 

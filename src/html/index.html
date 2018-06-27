@@ -132,8 +132,8 @@
 		});
 		// Message example
 		var inView_message = new InView({
-			'element': document.querySelector('.inview-lead'),
-			'target': document.querySelector('.inview-message'),
+			'element': document.querySelector('.inview-message'),
+			'source': document.querySelector('.inview-lead'),
 			'toggle': true
 		});
 		// Aside example
@@ -142,26 +142,26 @@
 		});
 		// Navigation items
 		var inView_lorem = new InView({
-			'element': document.querySelector('#inview-lorem'),
-			'target': document.querySelector('[href="#inview-lorem"]'),
+			'element': document.querySelector('[href="#inview-lorem"]'),
+			'source': document.querySelector('#inview-lorem'),
 			'offset': document.querySelector('.inview-pitstop nav'),
 			'navigate': true
 		});
 		var inView_ipsum = new InView({
-			'element': document.querySelector('#inview-ipsum'),
-			'target': document.querySelector('[href="#inview-ipsum"]'),
+			'element': document.querySelector('[href="#inview-ipsum"]'),
+			'source': document.querySelector('#inview-ipsum'),
 			'offset': document.querySelector('.inview-pitstop nav'),
 			'navigate': true
 		});
 		var inView_dolor = new InView({
-			'element': document.querySelector('#inview-dolor'),
-			'target': document.querySelector('[href="#inview-dolor"]'),
+			'element': document.querySelector('[href="#inview-dolor"]'),
+			'source': document.querySelector('#inview-dolor'),
 			'offset': document.querySelector('.inview-pitstop nav'),
 			'navigate': true
 		});
 		var inView_sitamet = new InView({
-			'element': document.querySelector('#inview-sitamet'),
-			'target': document.querySelector('[href="#inview-sitamet"]'),
+			'element': document.querySelector('[href="#inview-sitamet"]'),
+			'source': document.querySelector('#inview-sitamet'),
 			'offset': document.querySelector('.inview-pitstop nav'),
 			'navigate': true
 		});
