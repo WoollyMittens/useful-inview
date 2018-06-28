@@ -57,7 +57,7 @@ InView.prototype.Main = function(config, context) {
 		'ifDownwards': ' scrolled-down',
 		'offset': 0,
 		'tolerance': 10,
-		'toggle': true,
+		'reversible': true,
 		'navigate': false,
 		'step': 0.1,
 		'transform': null,
@@ -197,8 +197,8 @@ InView.prototype.Main = function(config, context) {
 				// give it the class name
 				changed.className += this.config.ifVisible;
 			}
-			// or if its supposed to toggle
-		} else if (this.config.toggle) {
+			// or if its supposed to be reversible
+		} else if (this.config.reversible) {
 			// if the element has the class name
 			if (changed.className.indexOf(this.config.ifVisible) >= 0) {
 				// remove the class name
@@ -214,8 +214,8 @@ InView.prototype.Main = function(config, context) {
 				// give it the class name
 				changed.className += this.config.ifRevealed;
 			}
-			// or if its supposed to toggle
-		} else if (this.config.toggle) {
+			// or if its supposed to be reversible
+		} else if (this.config.reversible) {
 			// if the element has the class name
 			if (changed.className.indexOf(this.config.ifRevealed) >= 0) {
 				// remove the class name
@@ -232,7 +232,7 @@ InView.prototype.Main = function(config, context) {
 
 	this.ifFaded = function(position, changed) {
 		if (this.config.opacity) {
-			changed.style.opacity = this.config.opacity(1 - position.transit);
+			changed.style.opacity = Math.max(Math.min(this.config.opacity(1 - position.transit), 1), 0);
 		}
 	};
 

@@ -32,7 +32,7 @@ var inView = new InView({
 	'ifDownwards': ' scrolled-down',
 	'offset': -50,
 	'tolerance': 10,
-	'toggle': true,
+	'reversible': true,
 	'navigate': false,
 	'step': 0.1,
 	'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
@@ -60,7 +60,7 @@ var inView = new InView({
 
 **'tolerance' : {integer}** - Allow rounding errors up to this size.
 
-**'toggle' : {boolean}** - Allow the affected element to change more than once.
+**'reversible' : {boolean}** - Allow the affected element to change more than once.
 
 **'navigate' : {boolean}** - Allow a click on the target to scroll to the element.
 
