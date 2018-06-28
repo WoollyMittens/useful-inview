@@ -48,7 +48,7 @@ InView.prototype.Main = function(config, context) {
 	this.previous = {};
 	this.regexps = {};
 	this.config = {
-		'source': config.element,
+		'reference': config.element,
 		'ifAbove': ' scrolled-above',
 		'ifBelow': ' scrolled-below',
 		'ifVisible': ' scrolled-visible',
@@ -83,9 +83,9 @@ InView.prototype.Main = function(config, context) {
 			window.addEventListener('scroll', this.onScrolled.bind(this));
 			// initial refresh
 			this.onScrolled();
-			// if there is a navigation source
-			if (this.config.navigate && this.config.source) {
-				this.config.element.addEventListener('click', this.onNavigate.bind(this, this.config.source));
+			// if there is a navigation reference
+			if (this.config.navigate && this.config.reference) {
+				this.config.element.addEventListener('click', this.onNavigate.bind(this, this.config.reference));
 			}
 		}
 		// return the object
@@ -257,7 +257,7 @@ InView.prototype.Main = function(config, context) {
 	this.onScrolled = function(evt) {
 		// if the element is in view
 		var changed = this.config.element;
-		var watched = this.config.source || changed;
+		var watched = this.config.reference || changed;
 		var position = this.isElementInViewport(watched);
 		var previous = this.previous;
 		// note the direction the page is being scrolled in
