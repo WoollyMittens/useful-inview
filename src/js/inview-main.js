@@ -21,7 +21,8 @@ InView.prototype.Main = function(config, context) {
 		'navigate': false,
 		'step': 0.1,
 		'transform': null,
-		'opacity': null
+		'opacity': null,
+		'play': null
 	};
 
 	for (var key in config) {
@@ -55,7 +56,7 @@ InView.prototype.Main = function(config, context) {
 	this.parse = function(attr) {
 		if(!attr) return null;
 		var values = attr.split(',');
-		var unit = values[0].match(/\%|deg|rem|em|pt|px/);
+		var unit = values[0].match(/\%|deg|rem|vh|em|pt|px/);
 		values[0] = parseFloat(values[0]);
 		values[1] = parseFloat(values[1]);
 		return {'from': values[0], 'to': values[1], 'unit': unit};
@@ -67,6 +68,9 @@ InView.prototype.Main = function(config, context) {
 		var dataRotate = element.getAttribute('data-rotate');
 		var dataScale = element.getAttribute('data-scale');
 		var dataOpacity = element.getAttribute('data-opacity');
+		var dataPlay = element.getAttribute('data-play');
+		var dataOffset = element.getAttribute('data-offset');
+		var dataReference = element.getAttribute('data-reference');
 		if (dataTranslateX || dataTranslateY || dataRotate || dataScale) {
 			var hor = this.parse(dataTranslateX);
 			var ver = this.parse(dataTranslateY);
@@ -86,13 +90,26 @@ InView.prototype.Main = function(config, context) {
 				return ((opacity.to - opacity.from) * transit + opacity.from);
 			}
 		}
+		if (dataPlay) {
+			this.config.play = function(transit) {
+				return (1 - transit >= parseFloat(dataPlay));
+			}
+		}
+		if (dataOffset) {
+			this.config.offset = dataOffset;
+		}
+		if (dataReference) {
+			this.config.reference = document.querySelector(dataReference);
+		}
 	};
 
 	this.offset = function() {
-		// measure the offset in realtime if a DOM element was supplied
-		return isNaN(this.config.offset)
-			? Math.max(this.config.offset.offsetHeight + this.config.offset.getBoundingClientRect().y + this.config.tolerance, 0)
-			: this.config.offset;
+		// if the offset is a percentage
+		if (/%$/.test(this.config.offset)) return parseFloat(this.config.offset) / 100 * (window.innerHeight || document.documentElement.clientHeight);
+		// if the offset is a DOM node
+		if (this.config.offset instanceof Element) return Math.max(this.config.offset.offsetHeight + this.config.offset.getBoundingClientRect().y + this.config.tolerance, 0);
+		// or return it directly
+		return parseFloat(this.config.offset);
 	};
 
 	this.isElementInViewport = function(el) {
@@ -196,6 +213,21 @@ InView.prototype.Main = function(config, context) {
 		}
 	};
 
+	this.ifPlayed = function(position, changed) {
+		if (this.config.play) {
+			var hasPlayed = (changed.getAttribute('data-played') === 'true');
+			var shouldPlay = this.config.play(position.transit);
+			if (shouldPlay && !hasPlayed) {
+				changed.play();
+				changed.setAttribute('data-played', 'true');
+			} else if (!shouldPlay && hasPlayed && position.transit === 1) {
+				changed.pause();
+				changed.currentTime = 0;
+				changed.setAttribute('data-played', 'false');
+			}
+		}
+	};
+
 	// EVENTS
 
 	this.onNavigate = function(destination, evt) {
@@ -234,6 +266,8 @@ InView.prototype.Main = function(config, context) {
 		this.ifTransformed(position, changed);
 		// apply the opacity
 		this.ifFaded(position, changed);
+		// control the video
+		this.ifPlayed(position, changed);
 		// store the position
 		this.previous = position;
 	};

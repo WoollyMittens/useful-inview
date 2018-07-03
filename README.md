@@ -36,7 +36,8 @@ var inView = new InView({
 	'navigate': false,
 	'step': 0.1,
 	'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
-	'opacity': function(transit){ return transit }
+	'opacity': function(transit){ return transit },
+	'play': function(transit){ return (transit <= 0.5) }
 });
 ```
 
@@ -71,6 +72,9 @@ var inView = new InView({
 
 **'opacity' : {function(exposure)}** - Optional function that returns a CSS opacity based on the transit.
 - **'exposure' : {float}** - Number that increase from 0 to 1 as the objects scrolls into view.
+
+**'play' : {function(transit)}** - Optional function that triggers a video to play based on the transit.
+- **'exposure' : {float}** - Number that decrease from 1 to 0 as the objects scrolls into view.
 
 ```html
 <aside class="inview-inline" data-translate-x="150%,0%" data-translate-y="150%,0%" data-rotate="0deg,180deg" data-scale="0.5,1" data-opacity="0,1">
