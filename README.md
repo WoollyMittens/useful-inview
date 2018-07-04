@@ -34,6 +34,7 @@ var inView = new InView({
 	'tolerance': 10,
 	'reversible': true,
 	'navigate': false,
+	'easing': 'linear',
 	'step': 0.1,
 	'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
 	'opacity': function(transit){ return transit },
@@ -64,6 +65,8 @@ var inView = new InView({
 **'reversible' : {boolean}** - Allow the affected element to change more than once.
 
 **'navigate' : {boolean}** - Allow a click on the target to scroll to the element.
+
+**'easing' : {linear|easin|easeout|easinout}** - Apply an easing function to the motion.
 
 **'step' : {float}** - Fraction of total distance to scroll each animation step.
 
