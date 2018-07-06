@@ -66,7 +66,7 @@ var inView = new InView({
 
 **'navigate' : {boolean}** - Allow a click on the target to scroll to the element.
 
-**'easing' : {linear|easin|easeout|easinout}** - Apply an easing function to the motion.
+**'easing' : {linear|easein|easeout|easinout}** - Apply an easing function to the motion.
 
 **'step' : {float}** - Fraction of total distance to scroll each animation step.
 

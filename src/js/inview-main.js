@@ -41,9 +41,9 @@ InView.prototype.Main = function(config, context) {
 			this.attribs(this.config.element);
 			// pick an easing function
 			switch(this.config.easing) {
-				case 'easin': this.config.easing = function (t) { return t*t }; break;
-				case 'easeout': this.config.easing = function (t) { return (1-t)*(1-t) }; break;
-				case 'easinout': this.config.easing = function (t) { return t*t/(t*t+(1-t)*(1-t)) } break;
+				case 'easein': this.config.easing = function (t) { return t*(2-t) }; break;
+				case 'easeout': this.config.easing = function (t) { return t*t }; break;
+				case 'easinout': this.config.easing = function (t) { return t*t/(t*t+(1-t)*(1-t)) }; break;
 				default: this.config.easing = function (t) { return t };
 			}
 			// initial scroll position

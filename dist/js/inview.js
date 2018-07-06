@@ -59,6 +59,7 @@ InView.prototype.Main = function(config, context) {
 		'tolerance': 10,
 		'reversible': true,
 		'navigate': false,
+		'easing': 'linear',
 		'step': 0.1,
 		'transform': null,
 		'opacity': null,
@@ -78,6 +79,13 @@ InView.prototype.Main = function(config, context) {
 			this.regexps.direction = new RegExp(this.config.ifDownwards + '|' + this.config.ifUpwards);
 			// interpret the tag attributes
 			this.attribs(this.config.element);
+			// pick an easing function
+			switch(this.config.easing) {
+				case 'easein': this.config.easing = function (t) { return t*(2-t) }; break;
+				case 'easeout': this.config.easing = function (t) { return t*t }; break;
+				case 'easinout': this.config.easing = function (t) { return t*t/(t*t+(1-t)*(1-t)) }; break;
+				default: this.config.easing = function (t) { return t };
+			}
 			// initial scroll position
 			this.previous.scrolled = window.pageYOffset;
 			// add the event handler
@@ -111,6 +119,7 @@ InView.prototype.Main = function(config, context) {
 		var dataPlay = element.getAttribute('data-play');
 		var dataOffset = element.getAttribute('data-offset');
 		var dataReference = element.getAttribute('data-reference');
+		var dataEasing = element.getAttribute('data-easing');
 		if (dataTranslateX || dataTranslateY || dataRotate || dataScale) {
 			var hor = this.parse(dataTranslateX);
 			var ver = this.parse(dataTranslateY);
@@ -141,6 +150,9 @@ InView.prototype.Main = function(config, context) {
 		if (dataReference) {
 			this.config.reference = document.querySelector(dataReference);
 		}
+		if (dataEasing) {
+			this.config.easing = dataEasing;
+		}
 	};
 
 	this.offset = function() {
@@ -167,7 +179,7 @@ InView.prototype.Main = function(config, context) {
 			'below': rect.top > (height + offset),
 			'visible': rect.top <= (height + offset) && rect.bottom >= offset,
 			'revealed': rect.top <= offset && rect.bottom >= offset,
-			'transit': Math.min(Math.max((rect.top - minY - offset) / (maxY - minY - offset), 0), 1)
+			'transit': this.config.easing(Math.min(Math.max((rect.top - minY - offset) / (maxY - minY - offset), 0), 1))
 		});
 	};
 
