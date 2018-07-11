@@ -36,9 +36,9 @@ var inView = new InView({
 	'navigate': false,
 	'easing': 'linear',
 	'step': 0.1,
-	'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
-	'opacity': function(transit){ return transit },
-	'play': function(transit){ return (transit <= 0.5) }
+	'transform': function(position){ return 'translateX(' + (position.transit * 100) + '%)' },
+	'opacity': function(position){ return position.transit },
+	'play': function(position){ return (position.transit <= 0.5) }
 });
 ```
 
@@ -70,14 +70,22 @@ var inView = new InView({
 
 **'step' : {float}** - Fraction of total distance to scroll each animation step.
 
-**'transform' : {function(transit)}** - Optional function that returns a CSS transformation based on the transit of the element.
-- **'transit' : {float}** - Number that decrease from 1 to 0 as the objects scrolls from bottom to top.
+**'transform' : {function(position)}** - Optional function that returns a CSS transformation based on the position of the element.
 
-**'opacity' : {function(exposure)}** - Optional function that returns a CSS opacity based on the transit.
-- **'exposure' : {float}** - Number that increase from 0 to 1 as the objects scrolls into view.
++ *'position.top' : {integer}* - Distance from the top of the screen in pixels.
++ *'position.bottom' : {integer}* - Distance from the bottom of the screen in pixels.
++ *'position.scrolled' : {integer}* - Total distance scrolled.
++ *'position.above' : {boolean}* - True if completely above the screen.
++ *'position.below' : {boolean}* - True is completely below the screen.
++ *'position.visible' : {boolean}* - True if visivle on the screen.
++ *'position.revealed' : {boolean}* - True if completely revealed.
++ *'position.entering' : {float}* - A value that changed between 1 and 0 as the object enters the screen.
++ *'position.leaving' : {float}* - A value that changed between 1 and 0 as the object leaves the screen.
++ *'position.transit' : {float}* - A value that changed between 1 and 0 as the object traverses the screen.
 
-**'play' : {function(transit)}** - Optional function that triggers a video to play based on the transit.
-- **'exposure' : {float}** - Number that decrease from 1 to 0 as the objects scrolls into view.
+**'opacity' : {function(position)}** - Optional function that returns a CSS opacity based on the position of the element.
+
+**'play' : {function(position)}** - Optional function that triggers a video to play based on the position of the element.
 
 ```html
 <aside class="inview-inline" data-translate-x="150%,0%" data-translate-y="150%,0%" data-rotate="0deg,180deg" data-scale="0.5,1" data-opacity="0,1">

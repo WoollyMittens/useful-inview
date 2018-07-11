@@ -81,11 +81,11 @@ InView.prototype.Main = function(config, context) {
 			this.attribs(this.config.element);
 			// pick an easing function
 			switch(this.config.easing) {
-				case 'easein': this.config.easing = function (t) { return t*(2-t) }; break;
-				case 'easeout': this.config.easing = function (t) { return t*t }; break;
-				case 'easinout': this.config.easing = function (t) { return t*t/(t*t+(1-t)*(1-t)) }; break;
-				default: this.config.easing = function (t) { return t };
-			}
+				case 'easein': this.easing = function (t) { return t*(2-t) }; break;
+				case 'easeout': this.easing = function (t) { return t*t }; break;
+				case 'easeinout': this.easing = function (t) { return t*t/(t*t+(1-t)*(1-t)) }; break;
+				default: this.easing = function (t) { return t };
+			};
 			// initial scroll position
 			this.previous.scrolled = window.pageYOffset;
 			// add the event handler
@@ -125,7 +125,8 @@ InView.prototype.Main = function(config, context) {
 			var ver = this.parse(dataTranslateY);
 			var rot = this.parse(dataRotate);
 			var scale = this.parse(dataScale);
-			this.config.transform = function(transit) {
+			this.config.transform = function(position) {
+				var transit = position.transit;
 				var translation = (hor) ? 'translateX(' + ((hor.to - hor.from) * (1 - transit) + hor.from) + hor.unit + ')' : '';
 				translation += (ver) ? ' translateY(' + ((ver.to - ver.from) * (1 - transit) + ver.from) + ver.unit + ')' : '';
 				translation += (rot) ? ' rotate(' + ((rot.to - rot.from) * (1 - transit) + rot.from) + rot.unit + ')' : '';
@@ -135,12 +136,14 @@ InView.prototype.Main = function(config, context) {
 		}
 		if (dataOpacity) {
 			var opacity = this.parse(dataOpacity);
-			this.config.opacity = function(transit) {
+			this.config.opacity = function(position) {
+				var transit = 1 - position.transit;
 				return ((opacity.to - opacity.from) * transit + opacity.from);
 			}
 		}
 		if (dataPlay) {
-			this.config.play = function(transit) {
+			this.config.play = function(position) {
+				var transit = position.transit;
 				return (1 - transit >= parseFloat(dataPlay));
 			}
 		}
@@ -153,6 +156,11 @@ InView.prototype.Main = function(config, context) {
 		if (dataEasing) {
 			this.config.easing = dataEasing;
 		}
+	};
+
+	this.easing = function(t) {
+		// default linear transition
+		return t;
 	};
 
 	this.offset = function() {
@@ -173,13 +181,17 @@ InView.prototype.Main = function(config, context) {
 		var minY = -el.offsetHeight;
 		var maxY = height;
 		return ({
+			'top': rect.top,
+			'bottom': rect.bottom,
 			'scrolled': scrolled,
 			'distance': rect.top - offset,
 			'above': rect.bottom < offset,
 			'below': rect.top > (height + offset),
 			'visible': rect.top <= (height + offset) && rect.bottom >= offset,
 			'revealed': rect.top <= offset && rect.bottom >= offset,
-			'transit': this.config.easing(Math.min(Math.max((rect.top - minY - offset) / (maxY - minY - offset), 0), 1))
+			'leaving': this.easing(Math.min(Math.max((rect.top - offset - minY) / (0 - minY), 0), 1)),
+			'entering': this.easing(Math.min(Math.max((rect.top - offset - minY - maxY) / (0 - minY), 0), 1)),
+			'transit': this.easing(Math.min(Math.max((rect.top - offset - minY) / (maxY - minY), 0), 1))
 		});
 	};
 
@@ -255,20 +267,20 @@ InView.prototype.Main = function(config, context) {
 
 	this.ifTransformed = function(position, changed) {
 		if (this.config.transform) {
-			changed.style.transform = this.config.transform(position.transit);
+			changed.style.transform = this.config.transform(position);
 		}
 	};
 
 	this.ifFaded = function(position, changed) {
 		if (this.config.opacity) {
-			changed.style.opacity = Math.max(Math.min(this.config.opacity(1 - position.transit), 1), 0);
+			changed.style.opacity = Math.max(Math.min(this.config.opacity(position), 1), 0);
 		}
 	};
 
 	this.ifPlayed = function(position, changed) {
 		if (this.config.play) {
 			var hasPlayed = (changed.getAttribute('data-played') === 'true');
-			var shouldPlay = this.config.play(position.transit);
+			var shouldPlay = this.config.play(position);
 			if (shouldPlay && !hasPlayed) {
 				changed.play();
 				changed.setAttribute('data-played', 'true');

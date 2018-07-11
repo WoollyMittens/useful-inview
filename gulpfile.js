@@ -62,12 +62,12 @@ gulp.task('connect:html', function () {
 });
 
 gulp.task('connect:css', function () {
-  gulp.src('dist/css/**/*.css')
+  gulp.src('dist/**/*.css')
     .pipe(connect.reload());
 });
 
 gulp.task('connect:js', function () {
-  gulp.src('dist/js/**/*.js')
+  gulp.src('dist/**/*.js')
     .pipe(connect.reload());
 });
 

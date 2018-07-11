@@ -169,8 +169,8 @@
 		var inView_transform = new InView({
 			'element': document.querySelector('.inview-transform'),
 			'offset': 300,
-			'transform': function(transit){ return 'translateX(' + (transit * 100) + '%)' },
-			'opacity': function(transit){ return transit }
+			'transform': function(position){ return 'translateX(' + (position.transit * 100) + '%)' },
+			'opacity': function(position){ return 1 - position.transit }
 		});
 		// Inline transformations
 		var inView_inline = new InView({
