@@ -34,9 +34,8 @@ var InView = function (config) {
 };
 
 // return as a require.js module
-if (typeof module !== 'undefined') {
-	exports = module.exports = InView;
-}
+if (typeof define != 'undefined') define([], function () { return InView });
+if (typeof module != 'undefined') module.exports = InView;
 
 // extend the class
 InView.prototype.Main = function(config, context) {

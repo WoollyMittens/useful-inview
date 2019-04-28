@@ -9,13 +9,29 @@ Try the <a href="http://www.woollymittens.nl/default.php?url=useful-inview">demo
 The stylesheet is best included in the header of the document.
 
 ```html
-<link rel="stylesheet" href="./css/inview.css"/>
+<link rel="stylesheet" href="css/inview.css"/>
 ```
 
 This include can be added to the header or placed inline before the script is invoked.
 
 ```html
-<script src="./js/inview.js"></script>
+<script src="js/inview.js"></script>
+```
+
+Or use [Require.js](https://requirejs.org/).
+
+```js
+requirejs([
+	'js/inview.js'
+], function(InView) {
+	...
+});
+```
+
+Or import into an MVC framework.
+
+```js
+var InView = require('js/inview.js');
 ```
 
 ## How to start the script
